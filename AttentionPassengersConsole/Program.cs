@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AttentionPassengers;
+using AttentionPassengers.Dto.Alerts;
 
 namespace AttentionPassengersConsole
 {
@@ -12,7 +13,8 @@ namespace AttentionPassengersConsole
         {
             AttentionPassengers.AttentionPassengers attnpass = new AttentionPassengers.AttentionPassengers();
             Task.Run(async () => {
-                await attnpass.Routes();
+                AlertsObject alerts = await attnpass.Alerts(true, true);
+                System.Diagnostics.Debug.WriteLine("");
             }).Wait();
         }
     }

@@ -1,9 +1,9 @@
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace AttentionPassengers.Dto
 {
-    public class Route
+    public class RouteScheduleDirection
     {
         [JsonProperty("route_id")]
         public string RouteId { get; private set; }
@@ -11,8 +11,7 @@ namespace AttentionPassengers.Dto
         [JsonProperty("route_name")]
         public string RouteName { get; private set; }
 
-        [DefaultValue(false)]
-        [JsonProperty("route_hide", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public bool RouteHide { get; private set; }
+        [JsonProperty("direction")]
+        public List<DirectionTrip> Direction { get; private set; }
     }
 }

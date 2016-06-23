@@ -10,7 +10,7 @@ namespace AttentionPassengers
 {
     public static class HelperMethods
     {
-        public static async Task<JObject> GetWebData(Uri uri, string apiKey)
+        public static async Task<string> GetWebData(Uri uri, string apiKey)
         {
             HttpClient client = new HttpClient();
             if (string.IsNullOrEmpty(apiKey))
@@ -26,14 +26,18 @@ namespace AttentionPassengers
             string responseString;
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                JObject responseObject = JObject.Parse(await response.Content.ReadAsStringAsync());
-                return responseObject;
+                return await response.Content.ReadAsStringAsync();
             }
             else
             {
                 responseString = await response.Content.ReadAsStringAsync();
                 throw new Exception($"MBTA exception:\n{responseString}");
             }
+        }
+
+        public static JObject ToJObject(this string str)
+        {
+            return JObject.Parse(str);
         }
 
         /// <summary>

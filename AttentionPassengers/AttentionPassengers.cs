@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AttentionPassengers.Dto;
+using AttentionPassengers.Dto.Alerts;
 using golf1052.Trexler;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -24,18 +25,13 @@ namespace AttentionPassengers
         }
 
         // routes
-        public async Task<List<Route>> Routes()
+        public async Task<RouteList> Routes()
         {
             TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("routes");
             try
             {
-                JObject response = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
-                List<Route> routes = new List<Route>();
-                foreach (JObject o in (JArray)response["mode"])
-                {
-                    routes.Add(JsonConvert.DeserializeObject<Route>(o.ToString()));
-                }
-                return routes;
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<RouteList>(responseString);
             }
             catch (Exception ex)
             {
@@ -44,10 +40,61 @@ namespace AttentionPassengers
         }
 
         // routesbystop
+        public async Task<RouteStop> RoutesByStop(string stop)
+        {
+            if (string.IsNullOrEmpty(stop))
+            {
+                throw new ArgumentNullException(nameof(stop));
+            }
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("routesbystop").SetQueryParam("stop", stop);
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<RouteStop>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         // stopsbyroute
+        public async Task<DirectionList> StopsByRoute(string route)
+        {
+            if (string.IsNullOrEmpty(route))
+            {
+                throw new ArgumentNullException(nameof(route));
+            }
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("stopsbyroute").SetQueryParam("route", route);
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<DirectionList>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         
         // stopsbylocation
+        public async Task<StopList> StopsByLocation(double lat, double lon)
+        {
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("stopsbylocation").SetQueryParams(new Dictionary<string, object>
+            {
+                { "lat", lat },
+                { "lon", lon }
+            });
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<StopList>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         // schedulebystop
 
@@ -72,6 +119,23 @@ namespace AttentionPassengers
         // vehiclesbytrip
 
         // alerts
+        public async Task<AlertsObject> Alerts(bool includeAccessAlerts = false, bool includeServiceAlerts = true)
+        {
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("alerts").SetQueryParams(new Dictionary<string, object>
+            {
+                { "include_access_alerts", includeAccessAlerts },
+                { "include_service_alerts", includeServiceAlerts }
+            });
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<AlertsObject>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         // alertsbyroute
 
@@ -91,7 +155,7 @@ namespace AttentionPassengers
             TrexUri url = new TrexUri(Constants.BaseUrl).AppendPathSegment("servertime");
             try
             {
-                JObject response = await HelperMethods.GetWebData(new Uri(url), ApiKey);
+                JObject response = (await HelperMethods.GetWebData(new Uri(url), ApiKey)).ToJObject();
                 return HelperMethods.EpochToDateTime((long)response["server_dt"]);
             }
             catch (Exception ex)
