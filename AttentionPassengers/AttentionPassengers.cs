@@ -138,16 +138,139 @@ namespace AttentionPassengers
         }
 
         // alertsbyroute
+        public async Task<AlertsByRouteObject> AlertsByRoute(string route, bool includeAccessAlerts = false, bool includeServiceAlerts = true)
+        {
+            if (string.IsNullOrEmpty(route))
+            {
+                throw new ArgumentNullException(nameof(route));
+            }
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("alertsbyroute").SetQueryParams(new Dictionary<string, object>
+            {
+                { "route", route },
+                { "include_access_alerts", includeAccessAlerts },
+                { "include_service_alerts", includeServiceAlerts }
+            });
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<AlertsByRouteObject>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         // alertsbystop
+        public async Task<AlertsByStopObject> AlertsByStop(string stop, bool includeAccessAlerts = false, bool includeServiceAlerts = true)
+        {
+            if (string.IsNullOrEmpty(stop))
+            {
+                throw new ArgumentNullException(nameof(stop));
+            }
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("alertsbystop").SetQueryParams(new Dictionary<string, object>
+            {
+                { "stop", stop },
+                { "include_access_alerts", includeAccessAlerts },
+                { "include_service_alerts", includeServiceAlerts }
+            });
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<AlertsByStopObject>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         // alertsbyid
+        public async Task<Alert> AlertById(int id, bool includeAccessAlerts = false, bool includeServiceAlerts = true)
+        {
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("alertbyid").SetQueryParams(new Dictionary<string, object>
+            {
+                { "id", id },
+                { "include_access_alerts", includeAccessAlerts },
+                { "include_service_alerts", includeServiceAlerts }
+            });
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<Alert>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         // alertheaders
+        public async Task<AlertHeadersObject> AlertHeaders(bool includeAccessAlerts = false, bool includeServiceAlerts = true)
+        {
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("alertheaders").SetQueryParams(new Dictionary<string, object>
+            {
+                { "include_access_alerts", includeAccessAlerts },
+                { "include_service_alerts", includeServiceAlerts }
+            });
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<AlertHeadersObject>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         // alertheadersbyroute
+        public async Task<AlertHeadersByRouteObject> AlertsHeadersByRoute(string route, bool includeAccessAlerts = false, bool includeServiceAlerts = true)
+        {
+            if (string.IsNullOrEmpty(route))
+            {
+                throw new ArgumentNullException(nameof(route));
+            }
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("alertheadersbyroute").SetQueryParams(new Dictionary<string, object>
+            {
+                { "route", route },
+                { "include_access_alerts", includeAccessAlerts },
+                { "include_service_alerts", includeServiceAlerts }
+            });
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<AlertHeadersByRouteObject>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         // alertheadersbystop
+        public async Task<AlertHeadersByStopObject> AlertHeadersByStop(string stop, bool includeAccessAlerts = false, bool includeServiceAlerts = true)
+        {
+            if (string.IsNullOrEmpty(stop))
+            {
+                throw new ArgumentNullException(nameof(stop));
+            }
+            TrexUri uri = new TrexUri(Constants.BaseUrl).AppendPathSegment("alertheadersbystop").SetQueryParams(new Dictionary<string, object>
+            {
+                { "stop", stop },
+                { "include_access_alerts", includeAccessAlerts },
+                { "include_service_alerts", includeServiceAlerts }
+            });
+            try
+            {
+                string responseString = await HelperMethods.GetWebData(new Uri(uri), ApiKey);
+                return JsonConvert.DeserializeObject<AlertHeadersByStopObject>(responseString);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         // servertime
         public async Task<DateTime> ServerTime()

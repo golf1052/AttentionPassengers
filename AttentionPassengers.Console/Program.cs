@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using AttentionPassengers;
 using AttentionPassengers.Dto.Alerts;
 
-namespace AttentionPassengersConsole
+namespace AttentionPassengers.Console
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            AttentionPassengers.AttentionPassengers attnpass = new AttentionPassengers.AttentionPassengers();
+            AttentionPassengers attnpass = new AttentionPassengers();
             Task.Run(async () => {
                 AlertsObject alerts = await attnpass.Alerts(true, true);
                 System.Diagnostics.Debug.WriteLine("");
